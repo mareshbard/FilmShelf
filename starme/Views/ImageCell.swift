@@ -7,7 +7,7 @@ class ImageCell: UICollectionViewCell { // celula individual de uma grade ou lis
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
         iv.clipsToBounds = true // corta parte que ultrapassa o limite
-        iv.tintColor = .systemBlue
+        iv.tintColor = .white
         iv.translatesAutoresizingMaskIntoConstraints = false // desativando layout padrao
         return iv
     }()
@@ -26,6 +26,7 @@ class ImageCell: UICollectionViewCell { // celula individual de uma grade ou lis
         ])
     }
     required init?(coder: NSCoder) {fatalError()}
+    
     func configure(systemImageName: String) {
         imageView.image = UIImage(systemName: systemImageName)
     }
