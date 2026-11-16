@@ -13,7 +13,6 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.prefersLargeTitles = true
         setupCollectionView()
     }
     
@@ -90,3 +89,4 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         
     }
 }
+
