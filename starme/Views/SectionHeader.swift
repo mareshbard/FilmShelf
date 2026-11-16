@@ -5,7 +5,9 @@ class SectionHeader: UICollectionReusableView {
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 16, weight: .semibold)
+        label.font = UIFont.preferredFont(forTextStyle: .headline)
+        
+        label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
