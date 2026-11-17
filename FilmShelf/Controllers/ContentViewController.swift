@@ -11,13 +11,16 @@ class ContentViewController: UITabBarController {
                 
                 let homeVC = HomeViewController()
                 homeVC.title = "Filmes"
-                return UINavigationController(rootViewController: homeVC)
+                let nav = UINavigationController(rootViewController: homeVC)
+                nav.navigationBar.prefersLargeTitles = true
+                return nav
             },
             UITab(title: "Perfil", image: UIImage(systemName: "person"), identifier: "1") { _ in
                 let profileVC = ProfileViewController()
                 profileVC.title = "Perfil"
-                return UINavigationController(rootViewController: profileVC)
-            }
+                let nav = UINavigationController(rootViewController: profileVC)
+                nav.navigationBar.prefersLargeTitles = true
+                return nav            }
         ]
     }
 }
