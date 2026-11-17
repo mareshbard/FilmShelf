@@ -8,13 +8,6 @@ struct Movie: Identifiable, Codable,  Equatable {
     let posterPath: String?
     let genreIds: [Int]?
     
-    var posterURL: URL? {
-        guard let posterPath = posterPath, let url = URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)") else {
-                return nil
-            }
-            return nil
-        }
-    
     private enum CodingKeys: String, CodingKey {
         case id
         case title
@@ -22,5 +15,11 @@ struct Movie: Identifiable, Codable,  Equatable {
         case releaseDate = "release_date"
         case posterPath = "poster_path"
         case genreIds = "genre_ids"
+    }
+    var posterURL: URL? {
+        guard let posterPath = posterPath, let url = URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)") else {
+                return nil
+            }
+            return url
     }
 }

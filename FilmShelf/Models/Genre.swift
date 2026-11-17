@@ -1,5 +1,9 @@
 import Foundation
-struct Genre: Decodable, Identifiable, Equatable {
+struct Genre: Codable, Identifiable, Equatable {
     let id: Int
     let name: String
+}
+
+struct GenreResponse: Codable {
+    let genres: [Genre]
 }
