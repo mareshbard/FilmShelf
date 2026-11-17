@@ -13,13 +13,13 @@
   "files": [
     {
       "kind": "folder",
-      "path": "starme",
+      "path": "FilmShelf",
       "target-membership": [
-        "starme",
+        "FilmShelf",
       ],
       "membership-exceptions": [
         {
-          "target": "starme",
+          "target": "FilmShelf",
           "exclusions": [
             "Info.plist",
           ],
@@ -29,15 +29,15 @@
       "kind": "group",
       "name": "Products",
       "children": [
-        { "path": "<PRODUCTS>/starme.app", "id": "AD997B6E30A5E00400BA8C5D", "type": "wrapper.application", "index": false },
+        { "path": "<PRODUCTS>/FilmShelf.app", "id": "AD997B6E30A5E00400BA8C5D", "type": "wrapper.application", "index": false },
       ],
     },
   ],
   "targets": [
     {
-      "name": "starme",
+      "name": "FilmShelf",
       "id": "AD997B6D30A5E00400BA8C5D",
-      "product": "Products/starme.app",
+      "product": "Products/FilmShelf.app",
       "product-type": "application",
       "build-phases": [
         "compile-sources",
@@ -51,11 +51,12 @@
         "CURRENT_PROJECT_VERSION": "1",
         "DEVELOPMENT_TEAM": "LAZXCZT4TF",
         "GENERATE_INFOPLIST_FILE": "YES",
-        "INFOPLIST_FILE": "starme/Info.plist",
+        "INFOPLIST_FILE": "FilmShelf/Info.plist",
         "INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents": "YES",
         "INFOPLIST_KEY_UILaunchStoryboardName": "LaunchScreen",
         "INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad": "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight",
         "INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone": "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight",
+        "IPHONEOS_DEPLOYMENT_TARGET": "27.0",
         "LD_RUNPATH_SEARCH_PATHS": [
           "$(inherited)",
           "@executable_path/Frameworks",
