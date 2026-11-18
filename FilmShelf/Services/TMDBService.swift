@@ -3,7 +3,7 @@ import Foundation
 struct TMDBService {
     private let apiKey = "e3cbe1cb333096ca6b8e36814067398b"
     private var baseUrl = "https://api.themoviedb.org/3/"
-    private let language = "en-US"
+    private let language = "pt-BR"
     
     private let session: URLSession
     
@@ -39,6 +39,15 @@ struct TMDBService {
         return url
     }
     
+    func searchMovies(query: String, page: Int = 1) async throws -> [Movie] {
+        let url = try createurl(path: "search/movie", queryItems: [
+            URLQueryItem(name: "query", value: query),
+            URLQueryItem(name: "page", value: String(page))
+        ])
+        let response: MovieResponse = try await fetchData(from: url)
+        return response.results
+    }
+    
     // usa generics pra passar o que quiser aqui como o tipo de dado (filme, genero) a ser decodificado
     func fetchData<T: Decodable>(from url: URL) async throws -> T {
         let (data, response) = try await session.data(from: url)
@@ -59,4 +68,3 @@ struct TMDBService {
     }
 }
 
-//

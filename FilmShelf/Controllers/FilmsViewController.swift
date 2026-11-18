@@ -7,13 +7,22 @@ class HomeViewController: UIViewController {
     private let service = TMDBService()
     private var moviesForCategory: [[Movie]] = [[], [], [], []]
     
+    private var searchResults: [Movie]? = nil
+    private var searchTask: Task<Void, Never>?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.prefersLargeTitles = true
         homeView.collectionView.dataSource = self
         homeView.collectionView.delegate = self
+        
+        homeView.searchBar.onSearch = {[weak self] text in self?.search(text)}
+        homeView.searchBar.onClear = { [weak self] in
+            self?.clearSearch() // se limpar, clearSearch é avisado
+        }
         loadData()
     }
+    
     
     override func loadView() {
         // definindo a root view
@@ -22,6 +31,29 @@ class HomeViewController: UIViewController {
     
     private var genreNames: [Int : String] = [:]
 
+    private func search(_ text: String) {
+        searchTask?.cancel()
+        searchTask = Task {
+            try? await Task.sleep(for: .milliseconds(400))
+            guard !Task.isCancelled else {return}
+            
+            do {
+                let results = try await service.searchMovies(query: text)
+                guard !Task.isCancelled else {return}
+                searchResults = results
+                homeView.collectionView.reloadData()
+            } catch {
+                print("Erro: ", error)
+                
+            }
+        }
+    }
+    
+    private func clearSearch() {
+        searchTask?.cancel()
+        searchResults = nil
+        homeView.collectionView.reloadData()
+    }
     private func loadData() {
         Task {
             do {
@@ -48,10 +80,17 @@ class HomeViewController: UIViewController {
 extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         // qtd de secoes
+        
+        if searchResults != nil {
+            return 1
+        }
         return sections.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if let results = searchResults {
+            return results.count
+        }
         // numero de itens na secao
         return moviesForCategory[section].count
     }
@@ -60,11 +99,19 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         // o que vai ser mostrado em cada item
         // inicia uma ImageCell
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCell.identifier, for: indexPath) as! ImageCell
-        let movie = moviesForCategory[indexPath.section][indexPath.item]
+        var movie: Movie
+        if let results = searchResults {
+            movie = results[indexPath.item]
+        } else {
+            movie = moviesForCategory[indexPath.section][indexPath.item]
+        }
+        
         cell.configure(with: movie) // imagens sendo colocadas
         return cell
     }
     
+    
+
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         if kind == CreditsFooter.kind {
@@ -73,15 +120,25 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         
         // header de cada secao, do tipo HeaderSection
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SectionHeader.identifier, for: indexPath) as! SectionHeader
-        header.titleLabel.text = sections[indexPath.section] // secoes sendo colocadas
+        
+        if searchResults != nil {
+            header.titleLabel.text = "Resultados da pesquisa"
+        } else {
+            header.titleLabel.text = sections[indexPath.section] // secoes sendo colocadas
+        }
         return header
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let movie = moviesForCategory[indexPath.section][indexPath.item]
-        let genres = movie.genreIds?.compactMap({genreNames[$0]})
-        print(movie.title, genres)
-
+        let movie: Movie
+        if let results = searchResults {
+            movie = results[indexPath.item]
+        } else {
+            movie = moviesForCategory[indexPath.section][indexPath.item]
+        }
+        let detailVC = DetailViewController(movie: movie)
+        let navController = UINavigationController(rootViewController: detailVC)
+        present(navController, animated: true)
     }
 
 }
