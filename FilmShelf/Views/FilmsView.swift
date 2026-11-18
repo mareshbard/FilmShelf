@@ -1,8 +1,11 @@
 import UIKit
 
 class FilmsView: UIView {
-    
+
     var collectionView: UICollectionView!
+    let searchBar = SearchBar()
+    
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupCollectionView()
@@ -16,11 +19,13 @@ class FilmsView: UIView {
     private var genreNames: [Int : String] = [:]
     
     private func setupCollectionView() {
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(searchBar)
         // inicia collection view usando o tamanho da tela
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         //se girar:
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight] // collection pode se redimensionar de acordo com a tela
-
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         // avisa quais classes usar pelo identificador
         collectionView.register(ImageCell.self, forCellWithReuseIdentifier: ImageCell.identifier)
         collectionView.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionHeader.identifier)
@@ -28,7 +33,20 @@ class FilmsView: UIView {
         collectionView.showsVerticalScrollIndicator = false
         
         addSubview(collectionView)
+        
+        NSLayoutConstraint.activate([
+            searchBar.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 8),
+            searchBar.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+            searchBar.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+            searchBar.heightAnchor.constraint(equalToConstant: 50),
+            
+            collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 8),
+            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
     }
+    
 
     private func createLayout() -> UICollectionViewLayout {
 
